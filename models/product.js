@@ -14,19 +14,27 @@ module.exports = class Product {
         products = JSON.parse(fileContent);
       }
       products.push(this);
+      
       fs.writeFile(p, JSON.stringify(products), (error) => {
         console.log('error: ', error)
       })
     })
   }
 
-  static fetchAll() {
+  static fetchAll(cb) {
     const p = path.join(rootDir, 'data', 'products.json')
     fs.readFile(p, (error, fileContent) => {
-      if (error) {
-        return [] 
+      if(fileContent === undefined) {
+        fs.writeFile(p, JSON.stringify([]), (error) => {
+          console.log('error: ', error)
+        })
+        cb([])
+        return
       }
-      return JSON.parse(fileContent)
+      if (error && fileContent !== undefined) {
+        cb([])
+      }
+      cb(JSON.parse(fileContent))
     })
   }
 }
