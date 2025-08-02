@@ -8,7 +8,6 @@ const getProductsFromFile = (cb) => {
   fs.readFile(p, (error, fileContent) => {
     if(fileContent === undefined) {
       fs.writeFile(p, JSON.stringify([]), (error) => {
-        console.log('error: ', error)
       })
       cb([])
       return
@@ -17,7 +16,6 @@ const getProductsFromFile = (cb) => {
       cb([])
       return
     }
-    console.log("JSON.parse(fileContent): ", JSON.parse(fileContent))
     cb(JSON.parse(fileContent))
   })
 }
