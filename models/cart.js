@@ -9,6 +9,8 @@ module.exports = class Cart {
     // Fetch the previous cart
     fs.readFile(p, (err, fileContent) => {
       let cart = { products: [], totalPrice: 0 };
+      console.log('err jooj: ', err)
+      console.log('fileContent: ', fileContent)
       if (!err) {
         cart = JSON.parse(fileContent)
       }
@@ -28,6 +30,31 @@ module.exports = class Cart {
       }
       cart.totalPrice = Number(cart.totalPrice) + Number(productPrice);
       fs.writeFile(p, JSON.stringify(cart), (err) => {
+        console.log('err: ', err)
+      })
+    })
+  }
+
+  static deleteProduct(id, productPrice) {
+    // Fetch the previous cart
+    fs.readFile(p, (err, fileContent) => {
+      if (err) {
+        return
+      }
+      const cart = JSON.parse(fileContent);
+
+      const updatedCart = { ...cart };
+
+      // Analyze the cart => Find existing product
+      const existingProduct = updatedCart.products.find((p) => p.id === id);
+      const existingProductQty = Number(existingProduct.qty);
+
+      const newCartProducts = cart.products.filter((p) => p.id !== id)
+
+      updatedCart.products = [...newCartProducts]
+      updatedCart.totalPrice = Number(cart.totalPrice) - (Number(productPrice) * existingProductQty);
+
+      fs.writeFile(p, JSON.stringify(updatedCart), (err) => {
         console.log('err: ', err)
       })
     })
