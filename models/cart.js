@@ -37,7 +37,7 @@ module.exports = class Cart {
     // Fetch the previous cart
     fs.readFile(p, (err, fileContent) => {
       if (err) {
-        return
+        return;
       }
       const cart = JSON.parse(fileContent);
 
@@ -45,6 +45,11 @@ module.exports = class Cart {
 
       // Analyze the cart => Find existing product
       const existingProduct = updatedCart.products.find((p) => p.id === id);
+      
+      if(!existingProduct) {
+        return;
+      }
+
       const existingProductQty = Number(existingProduct.qty);
 
       const newCartProducts = cart.products.filter((p) => p.id !== id)
