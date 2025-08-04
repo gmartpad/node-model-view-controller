@@ -24,6 +24,8 @@ exports.postAddProduct = (req, res, next) => {
   res.redirect('/');
 }
 
+// 
+
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit;
   if(!editMode) {
@@ -42,6 +44,12 @@ exports.getEditProduct = (req, res, next) => {
     });
   })
 }
+
+exports.postEditProduct = (req, res, next) => {
+  
+}
+
+// 
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll((products) => {
