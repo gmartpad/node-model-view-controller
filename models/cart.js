@@ -9,8 +9,6 @@ module.exports = class Cart {
     // Fetch the previous cart
     fs.readFile(p, (err, fileContent) => {
       let cart = { products: [], totalPrice: 0 };
-      console.log('err jooj: ', err)
-      console.log('fileContent: ', fileContent)
       if (!err) {
         cart = JSON.parse(fileContent)
       }
@@ -57,6 +55,17 @@ module.exports = class Cart {
       fs.writeFile(p, JSON.stringify(updatedCart), (err) => {
         console.log('err: ', err)
       })
+    })
+  }
+
+  static getCart(cb) {
+    fs.readFile(p, (err, fileContent) => {
+      const cart = JSON.parse(fileContent);
+      if (err) {
+        cb(null);
+      } else {
+        cb(cart);
+      }
     })
   }
 }
