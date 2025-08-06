@@ -25,13 +25,18 @@ exports.getProduct = (req, res, next) => {
 // 
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render('shop/index', {
-      prods: products,
-      pageTitle: 'Shop',
-      path: '/'
-    });
-  })
+  Product.fetchAll()
+    .then(([rows, fieldData]) => {
+      const products = rows;
+      res.render('shop/index', {
+        prods: products,
+        pageTitle: 'Shop',
+        path: '/'
+      });
+    })
+    .catch((err) => {
+      console.error(err)
+    })
 }
 
 // 
