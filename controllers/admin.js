@@ -39,17 +39,22 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect('/');
   }
   const prodId = req.params.productId;
-  Product.findById(prodId, (product) => {
-    if(!product) {
-      return res.redirect('/');
-    }
-    res.render('admin/edit-product', {
-      pageTitle: 'Add Product',
-      path: '/admin/edit-product',
-      editing: editMode,
-      product: product
-    });
-  })
+  Product.findById(prodId)
+    .then(([rows, fieldData]) => {
+      const foundProduct = rows[0]
+      if(!foundProduct) {
+        return res.redirect('/');
+      }
+      res.render('admin/edit-product', {
+        pageTitle: 'Add Product',
+        path: '/admin/edit-product',
+        editing: editMode,
+        product: foundProduct
+      });
+    })
+    .catch((err) => {
+      console.error(err)
+    })
 }
 
 exports.postEditProduct = (req, res, next) => {
