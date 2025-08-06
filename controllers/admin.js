@@ -22,7 +22,13 @@ exports.postAddProduct = (req, res, next) => {
     price,
   )
   product.save()
-  res.redirect('/');
+    .then(() => {
+      res.redirect('/');
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+  
 }
 
 // 
@@ -60,7 +66,12 @@ exports.postEditProduct = (req, res, next) => {
     price,
   )
   product.save()
-  res.redirect('/admin/products');
+    .then(() => {
+      res.redirect('/admin/products');
+    })
+    .catch((err) => {
+      console.error(err)
+    })
 }
 
 // 
