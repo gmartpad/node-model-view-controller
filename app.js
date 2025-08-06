@@ -14,16 +14,6 @@ app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
-db.execute("SELECT * from products;")
-  .then((result) => {
-    console.log('result: ', result)
-    console.log('result[0]: ', result[0])
-    console.log('result[1]: ', result[1])
-  })
-  .catch((err) => {
-    console.error(err)
-  })
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 

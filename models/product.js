@@ -1,26 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const rootDir = require('../util/path')
-
 const Cart = require('./cart')
 
-const p = path.join(rootDir, 'data', 'products.json')
+const db = require('../util/database')
 
-const getProductsFromFile = (cb) => {
-  fs.readFile(p, (error, fileContent) => {
-    if(fileContent === undefined) {
-      fs.writeFile(p, JSON.stringify([]), (error) => {
-      })
-      cb([])
-      return
-    }
-    if (error && fileContent !== undefined) {
-      cb([])
-      return
-    }
-    cb(JSON.parse(fileContent))
-  })
-}
 module.exports = class Product {
   constructor(id, title, imageUrl, description, price) {
     this.id = id;
@@ -31,45 +12,18 @@ module.exports = class Product {
   }
 
   save() {
-    getProductsFromFile((products) => {
-      if(this.id) {
-        const existingProductIndex = products.findIndex((p) => p.id === this.id);
-        const updatedProducts = [...products];
-        updatedProducts[existingProductIndex] = this;
-        fs.writeFile(p, JSON.stringify(updatedProducts), (error) => {
-          console.log('error: ', error)
-        })
-      } else {
-        this.id = Math.random().toString();
-        products.push(this);
-        fs.writeFile(p, JSON.stringify(products), (error) => {
-          console.log('error: ', error)
-        })
-      }
-    })
+    
   }
 
   static deleteById(id) {
-    getProductsFromFile(products => {
-      const filteredProducts = products.filter((p) => p.id !== id);
-      const productToBeDeleted = products.find((p) => p.id === id);
-      fs.writeFile(p, JSON.stringify(filteredProducts), (err) => {
-        if(!err) {
-          Cart.deleteProduct(id, productToBeDeleted.price)
-        }
-        console.log(err)
-      })
-    })
+    
   }
 
-  static fetchAll(cb) {
-    getProductsFromFile(cb)
+  static fetchAll() {
+    return db.execute("SELECT * from products;");
   }
 
-  static findById(id, cb) {
-    getProductsFromFile(products => {
-      const product = products.find(p => p.id === id);
-      cb(product)
-    })
+  static findById(id) {
+    
   }
 }
